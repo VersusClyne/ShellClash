@@ -346,6 +346,10 @@ gettar(){
 			#设为init.d方式启动
 			mv $clashdir/clashservice /etc/init.d/clash
 			chmod  777 /etc/init.d/clash
+	elif [ -f /etc/rc ];then
+			#设为rc.d/init.d方式启动
+			mv $clashdir/clashservice /etc/rc.d/init.d/clash
+			chmod  777 /etc/rc.d/init.d/clash
 	else
 		[ -w /etc/systemd/system ] && sysdir=/etc/systemd/system
 		[ -w /usr/lib/systemd/system ] && sysdir=/usr/lib/systemd/system
@@ -831,6 +835,7 @@ update(){
 			sed -i '/ALL_PROXY/'d $profile
 			rm -rf $clashdir
 			rm -rf /etc/init.d/clash
+			rm -rf /etc/rc.d/init.d/clash
 			rm -rf /etc/systemd/system/clash.service
 			rm -rf /usr/lib/systemd/system/clash.service
 			rm -rf /www/clash
