@@ -342,14 +342,14 @@ gettar(){
 	#初始化文件目录
 	[ -f "$clashdir/mark" ] || echo '#标识clash运行状态的文件，不明勿动！' > $clashdir/mark
 	#判断系统类型写入不同的启动文件
-	if [ -f /etc/rc.common ];then
-			#设为init.d方式启动
-			mv $clashdir/clashservice /etc/init.d/clash
-			chmod  777 /etc/init.d/clash
-	elif [ -f /etc/rc ];then
+	if [ -f /etc/rc ];then
 			#设为rc.d/init.d方式启动
 			mv $clashdir/clashservice /etc/rc.d/init.d/clash
 			chmod  777 /etc/rc.d/init.d/clash
+	elif [ -f /etc/rc.common ];then
+			#设为init.d方式启动
+			mv $clashdir/clashservice /etc/init.d/clash
+			chmod  777 /etc/init.d/clash
 	else
 		[ -w /etc/systemd/system ] && sysdir=/etc/systemd/system
 		[ -w /usr/lib/systemd/system ] && sysdir=/usr/lib/systemd/system
