@@ -759,7 +759,7 @@ clashadv(){
 			$clashdir/start.sh stop
 			sleep 2
 		else
-			if [ -f /etc/init.d/clash -o -w /etc/systemd/system -o -w /usr/lib/systemd/system ];then
+			if [ -f /etc/init.d/clash -o -w /etc/rc.d/init.d/clash -o -w /etc/systemd/system -o -w /usr/lib/systemd/system ];then
 				echo -e "\033[32m改为使用默认方式启动clash服务！！\033[0m"
 				start_old=未开启
 				setconfig start_old $start_old
@@ -1057,6 +1057,12 @@ clashsh(){
 			echo -e "\033[33m已禁止Clash开机启动！\033[0m"
 		elif [ "$autostart" = "disable_rc" ]; then
 			/etc/init.d/clash enable
+			echo -e "\033[32m已设置Clash开机启动！\033[0m"
+		elif [ "$autostart" = "enable_rc" ]; then
+			/etc/rc.d/init.d/clash disable
+			echo -e "\033[33m已禁止Clash开机启动！\033[0m"
+		elif [ "$autostart" = "disable_rc" ]; then
+			/etc/rc.d/init.d/clash enable
 			echo -e "\033[32m已设置Clash开机启动！\033[0m"
 		elif [ "$autostart" = "enable_sys" ]; then
 			systemctl disable clash.service > /dev/null 2>&1
