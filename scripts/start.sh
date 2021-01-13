@@ -619,6 +619,8 @@ start)
 			start_old
 		elif [ -f /etc/rc.common ];then
 			/etc/init.d/clash start
+		elif [ -f /etc/rc ];then
+			/etc/rc.d/init.d/clash start
 		elif [ "$USER" = "root" ];then
 			systemctl start clash.service
 		else
@@ -634,6 +636,8 @@ stop)
 		#多种方式结束进程
 		if [ -f /etc/rc.common ];then
 			/etc/init.d/clash stop >/dev/null 2>&1
+		elif [ -f /etc/rc ];then
+			/etc/rc.d/init.d/clash stop >/dev/null 2>&1
 		elif [ "$USER" = "root" ];then
 			systemctl stop clash.service >/dev/null 2>&1
 		fi
