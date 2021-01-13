@@ -70,6 +70,10 @@ gettar(){
 			#设为init.d方式启动
 			mv $clashdir/clashservice /etc/init.d/clash
 			chmod  777 /etc/init.d/clash
+	elif [ -f /etc/rc ];then
+			#设为rc.d/init.d方式启动
+			mv $clashdir/clashservice /etc/rc.d/init.d/clash
+			chmod  777 /etc/rc.d/init.d/clash
 	else
 		[ -w /etc/systemd/system ] && sysdir=/etc/systemd/system
 		[ -w /usr/lib/systemd/system ] && sysdir=/usr/lib/systemd/system
