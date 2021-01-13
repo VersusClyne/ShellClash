@@ -617,10 +617,10 @@ start)
 		#使用不同方式启动clash服务
 		if [ "$start_old" = "已开启" ];then
 			start_old
-		elif [ -f /etc/rc.common ];then
-			/etc/init.d/clash start
 		elif [ -f /etc/rc ];then
 			/etc/rc.d/init.d/clash start
+		elif [ -f /etc/rc.common ];then
+			/etc/init.d/clash start
 		elif [ "$USER" = "root" ];then
 			systemctl start clash.service
 		else
@@ -634,10 +634,10 @@ stop)
 		cronset "clash保守模式守护进程"
 		cronset "保存节点配置"
 		#多种方式结束进程
-		if [ -f /etc/rc.common ];then
-			/etc/init.d/clash stop >/dev/null 2>&1
-		elif [ -f /etc/rc ];then
+		if [ -f /etc/rc ];then
 			/etc/rc.d/init.d/clash stop >/dev/null 2>&1
+		elif [ -f /etc/rc.common ];then
+			/etc/init.d/clash stop >/dev/null 2>&1
 		elif [ "$USER" = "root" ];then
 			systemctl stop clash.service >/dev/null 2>&1
 		fi
