@@ -36,6 +36,8 @@ getconfig(){
 	#开机自启检测
 	if [ -f /etc/rc.common ];then
 		[ -n "$(find /etc/rc.d -name '*clash')" ] && autostart=enable_rc || autostart=disable_rc
+	elif [ "`uname -a|grep synology`" ] && [ "`uname -m|grep armv7l`" ];then
+		[ -n "$(find /etc/init -name 'shellclash.conf')" ] && autostart=enable_rc || autostart=disable_rc
 	elif [ -w /etc/systemd/system -o -w /usr/lib/systemd/system ];then
 		[ -n "$(systemctl is-enabled clash.service 2>&1 | grep enable)" ] && autostart=enable_sys || autostart=disable_sys
 	fi
