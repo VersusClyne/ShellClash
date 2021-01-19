@@ -18,6 +18,7 @@ if [ "$USER" != "root" ];then
 	read -p "仍要安装？可能会产生大量未知错误！(1/0) > " res
 	[ "$res" != "1" ] && exit
 fi
+
 webget(){
 	#参数【$1】代表下载目录，【$2】代表在线地址
 	#参数【$3】代表输出显示，【$4】不启用重定向
@@ -70,10 +71,10 @@ gettar(){
 			#设为init.d方式启动
 			mv $clashdir/clashservice /etc/init.d/clash
 			chmod  777 /etc/init.d/clash
-	elif [ -f /etc/rc ];then
-			#设为rc.d/init.d方式启动
-			mv $clashdir/clashservice /etc/rc.d/init.d/clash
-			chmod  777 /etc/rc.d/init.d/clash
+	elif [ "`uname -a|grep synology`" ] && [ "`uname -m|grep armv7l`" ];then
+			#群晖路由器设为init/shellclash.conf方式启动
+			mv $clashdir/shellclash.conf /etc/init/shellclash.conf
+			chmod  644 /etc/init/shellclash.conf
 	else
 		[ -w /etc/systemd/system ] && sysdir=/etc/systemd/system
 		[ -w /usr/lib/systemd/system ] && sysdir=/usr/lib/systemd/system
@@ -104,8 +105,10 @@ gettar(){
 	#删除临时文件
 	rm -rf /tmp/clashfm.tar.gz 
 	rm -rf $clashdir/clashservice
+	rm -rf $clashdir/shellclash.conf
 	rm -rf $clashdir/clash.service
 }
+
 #下载及安装
 install(){
 echo -----------------------------------------------
@@ -154,12 +157,19 @@ else
 	echo 安装已取消！！！
 	exit;
 fi
+#检测储存空间是否足够
+SPACE_AVAL=$(df -k $dir | awk '{print $4}')
+SPACE_NEED=$(du -s $clashdir | awk '{print $1}')
 if [ ! -w $dir ];then
 	$echo "\033[31m没有$dir目录写入权限！请重新设置！\033[0m" && sleep 1 && setdir
-else
-	echo 目标目录磁盘剩余：$(df -h $dir | awk '{print $4}' | sed 1d )
+elif [ "$SPACE_AVAL" -gt "$SPACE_NEED" ];then
+	echo 目标目录磁盘剩余："$SPACE_AVAL" KB
 	read -p "确认安装？(1/0) > " res
 	[ "$res" = "1" ] && clashdir=$dir/clash || setdir
+else
+	echo $dir目录剩余"$SPACE_AVAL" KB, Clash安装需要"$SPACE_NEED" KB，空间不足！
+	echo 退出安装！
+	exit 1
 fi
 }
 
