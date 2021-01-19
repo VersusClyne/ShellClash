@@ -553,7 +553,8 @@ bfstart(){
 	if [ -f $clashdir/ui/index.html -a ! -f $bindir/ui/index.html ];then
 		cp -rf $clashdir/ui $bindir
 	fi
-	catpac #生成pac文件
+	#生成pac文件
+	catpac
 	#检查yaml配置文件
 	if [ ! -f $clashdir/config.yaml ];then
 		if [ -n "$Url" -o -n "$Https" ];then
@@ -617,7 +618,7 @@ start)
 		#使用不同方式启动clash服务
 		if [ "$start_old" = "已开启" ];then
 			start_old
-		elif [ -f /etc/rc ];then
+		elif [ -f /etc/init/shellclash.conf ];then
 			/etc/rc.d/init.d/clash start
 		elif [ -f /etc/rc.common ];then
 			/etc/init.d/clash start
@@ -634,7 +635,7 @@ stop)
 		cronset "clash保守模式守护进程"
 		cronset "保存节点配置"
 		#多种方式结束进程
-		if [ -f /etc/rc ];then
+		if [ -f /etc/init/shellclash.conf ];then
 			/etc/rc.d/init.d/clash stop >/dev/null 2>&1
 		elif [ -f /etc/rc.common ];then
 			/etc/init.d/clash stop >/dev/null 2>&1
