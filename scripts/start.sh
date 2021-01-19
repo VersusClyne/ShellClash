@@ -76,13 +76,23 @@ logger(){
 	[ "$(wc -l $clashdir/log | awk '{print $1}')" -gt 30 ] && sed -i '1,5d' $clashdir/log
 }
 cronset(){
-	# 参数1代表要移除的关键字,参数2代表要添加的任务语句
-	crondir=/tmp/cron_$USER
-	crontab -l > $crondir
-	sed -i "/$1/d" $crondir
-	echo "$2" >> $crondir
-	crontab $crondir
-	rm -f $crondir
+	if [ "`uname -a|grep synology`" ] && [ "`uname -m|grep armv7l`" ];then
+		# 参数1代表要移除的关键字,参数2代表要添加的任务语句
+		CROND=/usr/sbin/crond
+		crond -l > $CROND
+		sed -i "/$1/d" $CROND
+		echo "$2" >> $CROND
+		crond $CROND
+		rm -f $CROND
+	else
+		# 参数1代表要移除的关键字,参数2代表要添加的任务语句
+		crondir=/tmp/cron_$USER
+		crontab -l > $crondir
+		sed -i "/$1/d" $crondir
+		echo "$2" >> $crondir
+		crontab $crondir
+		rm -f $crondir
+	fi
 }
 mark_time(){
 	start_time=`date +%s`
