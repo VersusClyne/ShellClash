@@ -392,7 +392,8 @@ start_dns(){
 	fi
 }
 start_udp(){
-	gethost	#获取本地局域网地址段
+	gethost
+	#获取本地局域网地址段
 	ip rule add fwmark 1 table 100
 	ip route add local default dev lo table 100
 	iptables -t mangle -N clash
@@ -419,7 +420,8 @@ start_udp(){
 	iptables -t mangle -A PREROUTING -p udp $lanhost -j clash
 }
 stop_iptables(){
-	gethost #获取本地局域网地址段
+	gethost
+	#获取本地局域网地址段
     #重置iptables规则
 	ip rule del fwmark 1 table 100  2> /dev/null
 	ip route del local default dev lo table 100 2> /dev/null

@@ -107,6 +107,7 @@ gettar(){
 	#删除临时文件
 	rm -rf /tmp/clashfm.tar.gz 
 	rm -rf $clashdir/clashservice
+	rm -rf $clashdir/synologyclashservice
 	rm -rf $clashdir/shellclash.conf
 	rm -rf $clashdir/clash.service
 }
