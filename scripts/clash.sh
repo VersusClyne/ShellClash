@@ -28,7 +28,7 @@ getconfig(){
 	[ ! -f $clashdir/mac ] && touch $clashdir/mac
 	#获取本机host地址
 	host=$(ubus call network.interface.lan status 2>&1 | grep \"address\" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}';)
-	[ -z "$host" ] && host=$(ip a 2>&1 | grep -w 'inet' | grep 'global' | grep -E '192.|10.' | sed 's/.*inet.//g' | sed 's/\/[0-9][0-9].*$//g' | head -n 1)
+	[ -z "$host" ] && host=$(ip a 2>&1 | grep '\<inet\>' | grep 'global' | grep -E '192.|10.' | sed 's/.*inet.//g' | sed 's/\/[0-9][0-9].*$//g' | head -n 1)
 	[ -z "$host" ] && host=127.0.0.1
 	#dashboard目录位置
 	[ -d $clashdir/ui ] && dbdir=$clashdir/ui && hostdir=":$db_port/ui"
@@ -62,7 +62,7 @@ getconfig(){
 	PID=$(pidof clash)
 	if [ -n "$PID" ];then
 		run="\033[32m正在运行（$redir_mod）\033[0m"
-		VmRSS=`cat /proc/$PID/status|grep -w VmRSS|awk '{print $2,$3}'`
+		VmRSS=`cat /proc/$PID/status|grep \<VmRSS\>|awk '{print $2,$3}'`
 		#获取运行时长
 		if [ -n "$start_time" ]; then 
 			time=$((`date +%s`-start_time))

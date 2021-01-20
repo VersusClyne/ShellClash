@@ -101,7 +101,7 @@ mark_time(){
 }
 gethost(){
 	host=$(ubus call network.interface.lan status 2>&1 | grep \"address\" | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}';)
-	[ -z "$host" ] && host=$(ip a 2>&1 | grep -w 'inet' | grep 'global' | grep -E '192.|10.' | sed 's/.*inet.//g' | sed 's/\/[0-9][0-9].*$//g' | head -n 1)
+	[ -z "$host" ] && host=$(ip a 2>&1 | grep '\<inet\>' | grep 'global' | grep -E '192.|10.' | sed 's/.*inet.//g' | sed 's/\/[0-9][0-9].*$//g' | head -n 1)
 	[ -n "$host" ] && lanhost="-s $(echo $host | grep -oE '192.|10.')0.0.0/8"
 }
 #配置文件相关
@@ -647,7 +647,7 @@ stop)
 		#多种方式结束进程
 		if [ -f /etc/rc.common ];then
 			/etc/init.d/clash stop >/dev/null 2>&1
-		if [ "`uname -a|grep synology`" ] && [ "`uname -m|grep armv7l`" ];then
+		elif [ "`uname -a|grep synology`" ] && [ "`uname -m|grep armv7l`" ];then
 			/etc/rc.d/init.d/clash stop >/dev/null 2>&1
 		elif [ "$USER" = "root" ];then
 			systemctl stop clash.service >/dev/null 2>&1
