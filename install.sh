@@ -74,9 +74,9 @@ gettar(){
 			mv $clashdir/clashservice /etc/init.d/clash
 			chmod  777 /etc/init.d/clash
 	elif [ "`uname -a|grep synology`" ] && [ "`uname -m|grep armv7l`" ];then
-			#群晖路由器设为init/shellclash.conf方式启动
-			mv $clashdir/shellclash.conf /etc/init/shellclash.conf
-			chmod  644 /etc/init/shellclash.conf
+			#设为rc.d/init.d方式启动
+			mv $clashdir/synologyclashservice /etc/rc.d/init.d/clash
+			chmod  777 /etc/rc.d/init.d/clash
 	else
 		[ -w /etc/systemd/system ] && sysdir=/etc/systemd/system
 		[ -w /usr/lib/systemd/system ] && sysdir=/usr/lib/systemd/system

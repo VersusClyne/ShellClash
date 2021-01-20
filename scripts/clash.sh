@@ -37,7 +37,7 @@ getconfig(){
 	if [ -f /etc/rc.common ];then
 		[ -n "$(find /etc/rc.d -name '*clash')" ] && autostart=enable_rc || autostart=disable_rc
 	elif [ "`uname -a|grep synology`" ] && [ "`uname -m|grep armv7l`" ];then
-		[ -n "$(find /etc/init -name 'shellclash.conf')" ] && autostart=enable_rc || autostart=disable_rc
+		[ -n "$(find /etc/rc.d -name '*clash')" ] && autostart=enable_rc || autostart=disable_rc
 	elif [ -w /etc/systemd/system -o -w /usr/lib/systemd/system ];then
 		[ -n "$(systemctl is-enabled clash.service 2>&1 | grep enable)" ] && autostart=enable_sys || autostart=disable_sys
 	fi
@@ -1056,14 +1056,10 @@ clashsh(){
 			localproxy
 		elif [ "$autostart" = "enable_rc" ]; then
 			/etc/init.d/clash disable
-			echo -e "\033[33m已禁止Clash开机启动！\033[0m"
-		elif [ "$autostart" = "disable_rc" ]; then
-			/etc/init.d/clash enable
-			echo -e "\033[32m已设置Clash开机启动！\033[0m"
-		elif [ "$autostart" = "enable_rc" ]; then
 			/etc/rc.d/init.d/clash disable
 			echo -e "\033[33m已禁止Clash开机启动！\033[0m"
 		elif [ "$autostart" = "disable_rc" ]; then
+			/etc/init.d/clash enable
 			/etc/rc.d/init.d/clash enable
 			echo -e "\033[32m已设置Clash开机启动！\033[0m"
 		elif [ "$autostart" = "enable_sys" ]; then
