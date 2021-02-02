@@ -554,12 +554,14 @@ getdb(){
 		echo -e "\033[33m下载成功，正在解压文件！\033[0m"
 		mkdir -p $dbdir > /dev/null
 		tar -zxvf "/tmp/clashdb.tar.gz" -C $dbdir > /dev/null
-		[ $? -ne 0 ] && tar -zxvf "/tmp/clashdb.tar.gz" --no-same-permissions -C $dbdir > /dev/null
-		[ $? -ne 0 ] && echo "文件解压失败！" && rm -rf /tmp/clashfm.tar.gz && exit 1 
+		if [ $? -ne 0 ];then
+			tar -zxvf "/tmp/clashdb.tar.gz" --no-same-permissions -C $dbdir > /dev/null
+			[ $? -ne 0 ] && echo "文件解压失败！" && rm -rf /tmp/clashfm.tar.gz && exit 1 
+		fi
 		#修改默认host和端口
 		if [ "$db_type" = "clashdb" ];then
-			sed -i "s/127.0.0.1/${host}/g" $dbdir/static/js/*.js
-			sed -i "s/9090/${db_port}/g" $dbdir/static/js/*.js
+			sed -i "s/127.0.0.1/${host}/g" $dbdir/assets/*.js
+			sed -i "s/9090/${db_port}/g" $dbdir/assets/*.js
 		else
 			sed -i "s/127.0.0.1:9090/${host}:${db_port}/g" $dbdir/app*.js
 			#sed -i "s/7892/${db_port}/g" $dbdir/app*.js
@@ -582,7 +584,7 @@ setdb(){
 			echo -e "请选择面板\033[33m安装目录：\033[0m"
 			echo -----------------------------------------------
 			echo -e " 1 在$clashdir/ui目录安装"
-			echo -e " 2 在/www/clash目录安装(推荐！)"
+			echo -e " 2 在/www/clash目录安装"
 			echo -----------------------------------------------
 			echo " 0 返回上级菜单"
 			read -p "请输入对应数字 > " num
